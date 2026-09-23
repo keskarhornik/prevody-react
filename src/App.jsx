@@ -7,13 +7,20 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Card, Col, InputGroup, Row } from 'react-bootstrap';
 import { useState } from 'react';
-import MainForm from './Test.jsx'
+import MainForm from './Test.jsx';
+import { Home } from './Home.jsx';
+import { LogInScreen } from './LogIn.jsx';
+import { useEffect } from 'react'; // Add useEffect here
+const PagesMap = {
+  "home" : <Home></Home>,
+  "LogIn" : <LogInScreen></LogInScreen>
+}
 
 function NavMenu({MainContentSetter}){
     return (
     <Navbar bg="primary" variant='dark' expand={false} className="mb-3">
       <Container fluid>
-        <Navbar.Brand href="#">Offcanvas navbar</Navbar.Brand>
+        <Navbar.Brand onClick={() => {MainContentSetter("home")}}>Offcanvas navbar</Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar" />
         <Navbar.Offcanvas
           id="offcanvasNavbar"
@@ -29,11 +36,11 @@ function NavMenu({MainContentSetter}){
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="#action1">Home</Nav.Link>
-              <Nav.Link href="#action2">Link</Nav.Link>
-              <NavDropdown title="Dropdown" id="offcanvasNavbarDropdown">
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+              <Nav.Link onClick={() => {MainContentSetter("home")}}>Home</Nav.Link>
+              <Nav.Link onClick={() => {MainContentSetter(<Home></Home>)}}>Link</Nav.Link>
+              <NavDropdown title="Account" id="offcanvasNavbarDropdown">
+                <NavDropdown.Item onClick={() => {MainContentSetter("LogIn")}}>Log In</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {MainContentSetter(<Home></Home>)}}>Log Out</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Offcanvas.Body>
@@ -45,16 +52,25 @@ function NavMenu({MainContentSetter}){
 
 export default function App() {
 
-  const [activeMain, setActiveMain] = useState(<Home></Home>)
+  const [activeMain, setActiveMain] = useState(() => {
+    const saved = localStorage.getItem('activeMain');
+    // Default to 'home' if nothing saved or key is invalid
+    return saved && PagesMap[saved] ? saved : 'home';
+  });
+
+  // 2. Save to localStorage every time 'count' changes
+  useEffect(() => {
+    localStorage.setItem('activeMain', activeMain);
+  }, [activeMain]);
 
   return (
     <>
     <header>
-        <NavMenu/>
+        <NavMenu MainContentSetter={setActiveMain}/>
     </header>
     <main>
         <Container>
-            <MainForm jednotky={["j", "Kj"]}/>
+            {PagesMap[activeMain]}
         </Container>
     </main>
     </>
