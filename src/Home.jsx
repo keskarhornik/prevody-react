@@ -1,7 +1,12 @@
+import { LogInScreen } from "./LogIn";
+import { AuthUser } from "./Services";
+
 export function Home(){
+    
+    let loggedIn = AuthUser();
     return (
         <>
-        <p>This is Home</p>
+        {loggedIn ? <LogInScreen></LogInScreen> : <p>This is HomeW</p>}
         </>
     );
 }

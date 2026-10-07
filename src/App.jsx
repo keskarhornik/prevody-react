@@ -50,6 +50,8 @@ function NavMenu({MainContentSetter}){
   );
 }
 
+
+
 export default function App() {
 
   const [activeMain, setActiveMain] = useState(() => {
@@ -57,12 +59,12 @@ export default function App() {
     // Default to 'home' if nothing saved or key is invalid
     return saved && PagesMap[saved] ? saved : 'home';
   });
-
   // 2. Save to localStorage every time 'count' changes
   useEffect(() => {
     localStorage.setItem('activeMain', activeMain);
   }, [activeMain]);
 
+  
   return (
     <>
     <header>
