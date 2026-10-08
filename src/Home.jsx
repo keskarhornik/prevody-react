@@ -6,7 +6,7 @@ export function Home(){
     let loggedIn = AuthUser();
     return (
         <>
-        {loggedIn ? <LogInScreen></LogInScreen> : <p>This is HomeW</p>}
+        {!loggedIn ? <LogInScreen></LogInScreen> : <p>This is HomeW</p>}
         </>
     );
 }
