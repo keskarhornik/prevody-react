@@ -38,22 +38,28 @@ export async function AuthUser() {
 }
 
 export async function LogInUser(email, password) {
-    try {
-        const FormData = new URLSearchParams();
-        FormData.append("email", email)
-        FormData.append("password", password)
+    const formData = new URLSearchParams();
+    formData.append("email", email);
+    formData.append("password", password);
 
-        const response = await fetch('https://keskarhornik.endora.site/prevody-backend/LogIn.php', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }, 
-            body: FormData,
-        })
+    const response = await fetch('https://keskarhornik.endora.site/prevody-backend/LogIn.php', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData,
+    });
 
-        const data = await response.json();
+    const responseBody = await response.text();
+    if (!response.ok) {
+        console.error(
+            `Login request failed with HTTP ${response.status}:`,
+            responseBody || response.statusText
+        );
+        throw new Error(`Login request failed (HTTP ${response.status}). See the console for server details.`);
     }
-    catch (error){
 
-    }
+    const data = JSON.parse(responseBody);
+    console.log('Login response:', data);
+    return data;
 }

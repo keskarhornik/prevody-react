@@ -1,20 +1,30 @@
 import { Button, Form } from "react-bootstrap";
 import { useState } from 'react';
-import { AuthUser } from "./Services";
+import { AuthUser, LogInUser } from "./Services";
 
 export function LogInScreen() {
     // 1. Create state variables for email and password
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
-    
-    
-    
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        setStatusMessage('');
+
+        try {
+            const data = await LogInUser(email, password);
+            setStatusMessage(data.message || 'Login response received.');
+        } catch (error) {
+            console.error('Login failed:', error);
+            setStatusMessage(error instanceof Error ? error.message : 'Login failed.');
+        }
+    }
 
     return (
         <>
             {/* Attach onSubmit handler to the Form */}
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <center>
                     <label htmlFor="email" className="form-label h4">email</label>
                 </center>
