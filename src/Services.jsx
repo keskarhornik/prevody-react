@@ -37,7 +37,12 @@ export async function AuthUser() {
     
 }
 
+function SaveToken(token) {
+    localStorage.setItem('authToken', token);
+}
+
 export async function LogInUser(email, password) {
+    
     const formData = new URLSearchParams();
     formData.append("email", email);
     formData.append("password", password);
@@ -60,6 +65,7 @@ export async function LogInUser(email, password) {
     }
 
     const data = JSON.parse(responseBody);
-    console.log('Login response:', data);
-    return data;
+    SaveToken(data.message)
+    return data
 }
+
